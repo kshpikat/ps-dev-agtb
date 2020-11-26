@@ -5,10 +5,8 @@
      * Don't load data if dashlet filter is not accessible.
      */
     loadData: function(options) {
-        if(!this.already) {
-            this.model.on('change:country', this.loadData, this);
-            this.model.on('change:pos_function', this.loadData, this);
-            this.model.on('change:gtb_cluster', this.loadData, this);
+        if(!this.already && this.model) {
+            this.model.on('sync', this.loadData, this);
             this.already = true;
         }
         this._super('loadData', [options]);
@@ -40,10 +38,7 @@
     },
 
     _dispose: function() {
-        this.model.on('change:country', this.loadData);
-        this.model.on('change:pos_function', this.loadData);
-        this.model.on('change:gtb_cluster', this.loadData);
-
+        this.model.off('sync', this.loadData, this);
         this._super('_dispose');
     },
 })
